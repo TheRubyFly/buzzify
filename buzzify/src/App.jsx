@@ -2,19 +2,18 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5173");
+const socket = io("http://localhost:5000");
 
 function App() {
     const [buzzed, setBuzzed] = useState(null);
 
     useEffect(() => {
-        socket.on("buzz", (data) => {
-            console.log("buzzed");
+        socket.on("buzzed", (data) => {
+            console.log("à buzzé");
             setBuzzed(data.username);
         });
 
         socket.on("reset", () => {
-          console.log("reset");
             setBuzzed(null);
         });
 
@@ -22,8 +21,6 @@ function App() {
     }, []);
 
     const handleBuzz = () => {
-      console.log("handleBuzz");
-      console.log(buzzed);
         socket.emit("buzz", { username: "Joueur1" });
     };
 
@@ -32,10 +29,10 @@ function App() {
     };
 
     return (
-        <div>
-            <h1>Buzzer App</h1>
-            {buzzed ? <h2>{buzzed} a buzzé !</h2> : <div className="buzzer"><button onClick={handleBuzz}>Buzz</button></div>}
-            <button onClick={handleReset}>Réinitialiser</button>
+        <div className="bruh">
+            <h1>Buzzify</h1>
+            <div>{buzzed ? <h2>{buzzed} a buzzé !</h2> : <button className="buzzer" onClick={handleBuzz}>Buzz</button>}</div>
+            <div><button onClick={handleReset}>Réinitialiser</button></div>
         </div>
     );
 }
