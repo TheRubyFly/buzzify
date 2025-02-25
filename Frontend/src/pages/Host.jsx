@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Host(){
 
     return(
-        <div className="bruh">
+        <div className="board">
         <h1>CODE</h1>
         <div>
             <button 
@@ -15,7 +15,11 @@ function Host(){
             >
                 Créer une salle
             </button>
-            <button >Rejoindre une salle</button>
+            <button 
+                onClick={() => navigate("/Join")}
+            >
+                Rejoindre une salle
+            </button>
         </div>
         </div>
     );

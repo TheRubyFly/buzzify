@@ -8,7 +8,7 @@ import Player from './pages/Player.jsx'
 import Join from './pages/Join.jsx'
 
 
-const socket = io("http://localhost:5000");
+
 
 
 function App() {
