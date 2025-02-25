@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 
 function Player() {
     const [buzzed, setBuzzed] = useState(null);
+    const socket = io("http://localhost:5000");
 
     useEffect(() => {
         socket.on("buzzed", (data) => {
