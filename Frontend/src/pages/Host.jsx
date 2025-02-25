@@ -19,7 +19,6 @@ function Host(){
         </div>
         </div>
     );
-
 }
 
-export default Home;
+export default Host;
