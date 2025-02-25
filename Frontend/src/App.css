@@ -41,7 +41,11 @@
   color: #888;
 }
 
-.buzzer {
+.bouton {
   margin: 1em;
 }
 
+.remplir {
+  margin: 1.5em;
+  font-size: 3.5em;
+}
