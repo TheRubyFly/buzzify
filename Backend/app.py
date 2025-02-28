@@ -1,17 +1,17 @@
+import buzz
+import room
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from route import routes
 
 app = Flask(__name__)
 CORS(app)  # Autorise les requêtes cross-origin pour le développement
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+app.register_blueprint(routes)
+
 buzzed_user = None
-
-
-@app.route("/")
-def index():
-    return "Buzzer backend is running"
 
 
 @socketio.on("buzz")
