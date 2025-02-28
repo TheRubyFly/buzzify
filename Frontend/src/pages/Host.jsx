@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 function Host(){
 
+    // Créer une nouvelle room
+    const createRoom = () => {
+        socket.emit("create_room");
+    };
+
     return(
         <div className="board">
         <h1>CODE</h1>

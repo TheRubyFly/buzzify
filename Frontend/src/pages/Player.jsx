@@ -1,14 +1,15 @@
 
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { apiUrl } from "../config";
 
 function Player() {
     const [buzzed, setBuzzed] = useState(null);
-    const socket = io("http://localhost:5000");
+    const socket = io(apiUrl);
 
     useEffect(() => {
         socket.on("buzzed", (data) => {
-            console.log("à buzzé");
+            console.log(apiUrl);
             setBuzzed(data.username);
         });
 
