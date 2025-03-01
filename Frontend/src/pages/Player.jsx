@@ -4,10 +4,12 @@ import { io } from "socket.io-client";
 import { apiUrl } from "../config";
 import { useNavigate } from "react-router-dom";
 
+const socket = io(apiUrl);
 
 function Player() {
     const [buzzed, setBuzzed] = useState(null);
-    const socket = io(apiUrl);
+    const [roomCode, setRoomCode] = useState(localStorage.getItem("room") || "");
+    const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,10 +25,14 @@ function Player() {
     }, []);
 
     const handleBuzz = () => {
-        socket.emit("buzz", { username: "Joueur1" });
+        console.log("Quelqu'un a buzzé !")
+        console.log(localStorage.getItem("username"))
+        socket.emit("buzz", { username: username });
+        
     };
 
     const handleReset = () => {
+        console.log("Réinitialisation buzzer")
         socket.emit("reset");
     };
 

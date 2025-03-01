@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
+import { apiUrl } from "../config";
+
+const socket = io(apiUrl);
 
 function MyForm() {
     const [code, setCode] = useState("");
@@ -8,30 +12,15 @@ function MyForm() {
     const navigate = useNavigate();
 
     const joinRoom = () => {
+        localStorage.setItem("room", code);  // Stocke la room
+        localStorage.setItem("username", pseudo);  // Stocke le pseudo
+        console.log(localStorage.getItem("room"))
         socket.emit("join_room", { room: code, username: pseudo });
-        localStorage.setItem("room", roomCode);  // Stocke la room
-        localStorage.setItem("username", username);  // Stocke le pseudo
     };
 
     function handleSubmit(e) {
         e.preventDefault();
 
-<<<<<<< HEAD
-        // Vérification : les champs ne doivent pas être vides
-        try {(code.trim() && pseudo.trim())}
-        catch {
-                    // Si tout est bon, on peut envoyer les données
-        <joinRoom />
-        console.log("Rejoindre la salle avec:", { code, pseudo });
-        navigate("/room");
-        setError(""); // Efface le message d'erreur
-
-        }
-
-        setError("Veuillez remplir tous les champs !");
-        return; // Arrête l'exécution ici si un champ est vide
-    
-=======
         if (!code.trim() || !pseudo.trim()) {
             setError("Veuillez remplir tous les champs !");
             return;
@@ -39,8 +28,8 @@ function MyForm() {
 
         setError("");
         console.log("Rejoindre la salle avec:", { code, pseudo });
-        navigate("/Player");
->>>>>>> c4d1b16f1702c280774275628f7f6a517eeaa36a
+        joinRoom();
+        navigate("/room");
     }
 
     return (

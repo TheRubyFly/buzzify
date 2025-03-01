@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+import { apiUrl } from "../config";
 import { useNavigate } from "react-router-dom";
 
 
@@ -13,6 +15,7 @@ function Host(){
     const [code, setCode] = useState("");
     const [pseudo, setPseudo] = useState("");
     const [error, setError] = useState("");
+    const socket = io(apiUrl);
 
 
     function handleSubmit(e) {
@@ -28,7 +31,7 @@ function Host(){
         console.log("Rejoindre la salle avec:", { pseudo });
         setError(""); // Efface le message d'erreur
         createRoom()
-        navigate("/Player")
+        navigate("/host_room")
     }
 
     return(
