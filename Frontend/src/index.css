@@ -76,5 +76,7 @@ input{
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
+  color: #f9f9f9;
+  background-color: #1a1a1a;
   display: flex;
 }
