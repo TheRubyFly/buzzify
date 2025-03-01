@@ -10,18 +10,29 @@ function MyForm() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    const joinRoom = () => {
+        socket.emit("join_room", { room: code, username: pseudo });
+        localStorage.setItem("room", roomCode);  // Stocke la room
+        localStorage.setItem("username", username);  // Stocke le pseudo
+    };
+
     function handleSubmit(e) {
         e.preventDefault(); // Empêche le rechargement de la page
 
         // Vérification : les champs ne doivent pas être vides
-        if (!code.trim() || !pseudo.trim()) {
-            setError("Veuillez remplir tous les champs !");
-            return; // Arrête l'exécution ici si un champ est vide
+        try {(code.trim() && pseudo.trim())}
+        catch {
+                    // Si tout est bon, on peut envoyer les données
+        <joinRoom />
+        console.log("Rejoindre la salle avec:", { code, pseudo });
+        navigate("/room");
+        setError(""); // Efface le message d'erreur
+
         }
 
-        // Si tout est bon, on peut envoyer les données
-        console.log("Rejoindre la salle avec:", { code, pseudo });
-        setError(""); // Efface le message d'erreur
+        setError("Veuillez remplir tous les champs !");
+        return; // Arrête l'exécution ici si un champ est vide
+    
     }
 
     return (

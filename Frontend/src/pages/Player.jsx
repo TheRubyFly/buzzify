@@ -12,7 +12,6 @@ function Player() {
 
     useEffect(() => {
         socket.on("buzzed", (data) => {
-            console.log(apiUrl);
             setBuzzed(data.username);
         });
 
