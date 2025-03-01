@@ -16,22 +16,6 @@ function MyForm() {
     function handleSubmit(e) {
         e.preventDefault();
 
-<<<<<<< HEAD
-        // Vérification : les champs ne doivent pas être vides
-        try {(code.trim() && pseudo.trim())}
-        catch {
-                    // Si tout est bon, on peut envoyer les données
-        <joinRoom />
-        console.log("Rejoindre la salle avec:", { code, pseudo });
-        navigate("/room");
-        setError(""); // Efface le message d'erreur
-
-        }
-
-        setError("Veuillez remplir tous les champs !");
-        return; // Arrête l'exécution ici si un champ est vide
-    
-=======
         if (!code.trim() || !pseudo.trim()) {
             setError("Veuillez remplir tous les champs !");
             return;
@@ -39,8 +23,7 @@ function MyForm() {
 
         setError("");
         console.log("Rejoindre la salle avec:", { code, pseudo });
-        navigate("/Player");
->>>>>>> c4d1b16f1702c280774275628f7f6a517eeaa36a
+        navigate("/Room");
     }
 
     return (
