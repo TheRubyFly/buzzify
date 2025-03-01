@@ -37,7 +37,7 @@ function Player() {
                  <button 
                  className="home-button" 
                  onClick={() => navigate("/")}>
-                    <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" width="24" height="24"/>
+                    <img src="https://banner2.cleanpng.com/20180411/ike/avfjoey57.webp" width="72" height="72"/>
                 </button>
             </div>
             <h1>Buzzify</h1>
