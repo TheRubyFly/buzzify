@@ -78,4 +78,5 @@ input{
   transition: border-color 0.25s;
   display: flex;
   border-color: #000000;
+  border-width: 2px;
 }
