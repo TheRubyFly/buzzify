@@ -1,0 +1,4 @@
+- mettre en contact les gens
+- empecher de buzzer quand tu rejoins la room
+- bouger join_room dans room.py et que ça marche
+- chronomètre
