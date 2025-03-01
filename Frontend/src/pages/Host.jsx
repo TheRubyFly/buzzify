@@ -9,9 +9,17 @@ function Host(){
     const createRoom = () => {
         socket.emit("create_room");
     };
-
+    const navigate = useNavigate();
+    
     return(
         <div className="board">
+        <div>
+                 <button 
+                 className="home-button" 
+                 onClick={() => navigate("/")}>
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" width="24" height="24"/>
+                </button>
+            </div>
         <h1>CODE</h1>
         <div>
             <button 
