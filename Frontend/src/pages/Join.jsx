@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 function MyForm() {
@@ -7,6 +8,7 @@ function MyForm() {
     const [code, setCode] = useState("");
     const [pseudo, setPseudo] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     function handleSubmit(e) {
         e.preventDefault(); // Empêche le rechargement de la page
@@ -24,6 +26,13 @@ function MyForm() {
 
     return (
         <form onSubmit={handleSubmit}>
+            <div>
+                 <button 
+                 className="home-button" 
+                 onClick={() => navigate("/")}>
+                    <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" width="24" height="24"/>
+                </button>
+            </div>
             <div className="remplir">
                 <label>
                     Code de la salle{" "}
