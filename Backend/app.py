@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, request
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, broadcast, emit
 from route import routes  # Import des routes
 from socketio_config import socketio  # Import de socketio
 
@@ -33,17 +33,20 @@ buzzed_user = None
 @socketio.on("buzz")
 def handle_buzz(data):
     global buzzed_user
+    room_code = data["room"]
     if buzzed_user is None:  # Si personne n'a encore buzzé
         buzzed_user = data["username"]
-        emit("buzzed", {"username": buzzed_user}, broadcast=True)
+        emit("buzzed", {"username": buzzed_user}, room=room_code)
 
 
 # Événement de réinitialisation du buzzer
 @socketio.on("reset")
-def handle_reset():
+def handle_reset(data):
     global buzzed_user
     buzzed_user = None
-    emit("reset", broadcast=True)
+    room_code = data["room"]
+    socket.broadcast.to(room_code}.emit('reset');
+    # emit("reset", room=room_code)
 
 
 # Lancement du serveur

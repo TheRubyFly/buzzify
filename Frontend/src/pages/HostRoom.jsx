@@ -9,10 +9,8 @@ function HostRoom() {
     const [buzzed, setBuzzed] = useState(null);
     const socket = io(apiUrl);
     const navigate = useNavigate();
-    const [room, setRoom] = useState("");
     const [roomCode, setRoomCode] = useState(localStorage.getItem("room") || "");
     const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
-    const [buzzerDisabled, setBuzzerDisabled] = useState(false);
     const [resetTime, setResetTime] = useState(5);
 
 
@@ -26,13 +24,14 @@ function HostRoom() {
 
     // Buzz
     const handleBuzz = () => {
-        if (!buzzerDisabled) {
-            socket.emit("buzz", { room: roomCode, username });
-        }
+        console.log("Quelqu'un a buzzé !")
+        socket.emit("buzz", { username: username, room: roomCode });
+        
     };
 
     const handleReset = () => {
-        socket.emit("reset");
+        console.log("Réinitialisation buzzer")
+        socket.emit("reset", {room: roomCode});
     };
 
     useEffect(() => {
@@ -40,32 +39,20 @@ function HostRoom() {
             socket.emit("join_room", { room: roomCode, username });
         }
 
-        socket.on("room_joined", (data) => {
-            setRoomCode(data.room);
-            setBuzzerDisabled(data.buzzed);
-            setResetTime(data.reset_time);
-        });
-
         socket.on("buzzed", (data) => {
-            alert(`${data.username} a buzzé !`);
-            setBuzzerDisabled(true);
+            setBuzzed(data.username);
+
         });
 
-        socket.on("buzzer_reset", () => {
-            setBuzzerDisabled(false);
+        socket.on("reset", () => {
+            setBuzzed(null);
         });
 
         socket.on("reset_time_updated", (data) => {
             setResetTime(data.time);
         });
 
-        return () => {
-            socket.off("room_created");
-            socket.off("room_joined");
-            socket.off("buzzed");
-            socket.off("buzzer_reset");
-            socket.off("reset_time_updated");
-        };
+        return () => socket.off();  // Nettoyage des événements
     }, []);
 
 
@@ -79,6 +66,7 @@ function HostRoom() {
                 </button>
             </div>
             <h1>Buzzify</h1>
+            <h2>ID : {roomCode}</h2>
             <div>{buzzed ? <h2>{buzzed} a buzzé !</h2> : 
                 <button 
                     className="buzzer" 

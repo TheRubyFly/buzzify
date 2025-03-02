@@ -4,12 +4,18 @@ import { apiUrl } from "../config";
 import { useNavigate } from "react-router-dom";
 
 
-
 function Host(){
 
     // Créer une nouvelle room
     const createRoom = () => {
-        socket.emit("create_room");
+        socket.emit("create_room", { username: pseudo });
+        socket.once("room_created", (data) => {
+            console.log("Rejoint la salle : ",data.room);
+            localStorage.setItem("room", data.room);  // Stocke la room
+            localStorage.setItem("username", pseudo);  // Stocke le pseudo
+            setError(""); // Efface les erreurs précédentes
+            navigate("/host_room"); // Navigue SEULEMENT si la room existe
+        });
     };
     const navigate = useNavigate();
     const [code, setCode] = useState("");
@@ -31,7 +37,7 @@ function Host(){
         console.log("Rejoindre la salle avec:", { pseudo });
         setError(""); // Efface le message d'erreur
         createRoom()
-        navigate("/host_room")
+        // navigate("/host_room")
     }
 
     return(
