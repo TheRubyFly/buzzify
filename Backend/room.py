@@ -1,9 +1,9 @@
 import random
 import string
 
-from app import socketio
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
+from socketio_config import socketio
 
 # app = Flask(__name__)
 # socketio = SocketIO(app, cors_allowed_origins="*")
