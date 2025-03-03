@@ -21,37 +21,13 @@ CORS(app)
 socketio.init_app(app)
 
 # Import des modules après l'initialisation pour éviter les imports circulaires
-#import buzz  # Gestion du buzzer
-import room  # Gestion des rooms
+import buzz  # Gestion du buzzer
+
+# import room  # Gestion des rooms
+# from room import dic_rooms
 
 # Enregistrement des routes
 app.register_blueprint(routes)
-
-# Variable globale pour stocker l'utilisateur qui a buzzé
-
-
-
-# Événement de buzz
-@socketio.on("buzz")
-def handle_buzz(data):
-    user_rooms = rooms(request.sid)  # Liste des rooms où est connecté cet utilisateur
-    print(f"Utilisateur  est dans les rooms : {user_rooms}")
-    room_code = data["room"]
- #   if room_code in dic_rooms:
-        # rooms[room_code]["buzzed"] = True
-    emit("buzzed", {"username": data["username"]}, room=room_code)
-        # Démarrer le compte à rebours pour réinitialiser le buzzer
-        reset_time = rooms[room_code]["reset_time"]
-        threading.Thread(
-            target=reset_buzzer_after_delay, args=(room_code, reset_time)
-        ).start()
-
-# Événement de réinitialisation du buzzer
-@socketio.on("reset")
-def handle_reset(data):
-    room_code = data["room"]
-    rooms[room_code]["buzzed"] = False
-    emit("reset", room=room_code)
 
 
 # Lancement du serveur

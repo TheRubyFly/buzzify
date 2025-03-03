@@ -34,6 +34,7 @@ def handle_create_room(data):
 # Gérer l'entrée dans une room
 @socketio.on("join_room")
 def handle_join_room(data):
+    print(dic_rooms)
     room_code = data["room"]
     if room_code in dic_rooms:
         join_room(room_code)

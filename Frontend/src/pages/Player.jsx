@@ -14,9 +14,11 @@ function Player() {
 
     useEffect(() => {
 
-        if (roomCode) {
-            socket.emit("join_room", { room: roomCode, username});
-        }
+        setTimeout(() => {
+            if (roomCode) {
+                socket.emit("join_room", { room: roomCode, username });
+            }
+        }, 500);  // Attend 500 ms avant de rejoindre la room
 
         socket.on("buzzed", (data) => {
             setBuzzed(data.username);

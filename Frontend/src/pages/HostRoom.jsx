@@ -5,9 +5,9 @@ import { apiUrl } from "../config";
 import { useNavigate } from "react-router-dom";
 
 
+const socket = io(apiUrl);
 function HostRoom() {
     const [buzzed, setBuzzed] = useState(null);
-    const socket = io(apiUrl);
     const navigate = useNavigate();
     const [roomCode, setRoomCode] = useState(localStorage.getItem("room") || "");
     const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
@@ -15,10 +15,12 @@ function HostRoom() {
 
 
     const handleSetResetTime = (e) => {
-        const time = parseInt(e.target.value);
-        setResetTime(time);
-        if (roomCode) {
-            socket.emit("set_reset_time", { room: roomCode, time });
+        const time = parseInt(e.target.value, 10);
+        if (!isNaN(time) && time > 0) {  // Vérifie que l'entrée est valide
+            setResetTime(time);
+            if (roomCode) {
+                socket.emit("set_reset_time", { room: roomCode, time });
+            }
         }
     };
 
@@ -35,9 +37,12 @@ function HostRoom() {
     };
 
     useEffect(() => {
-        if (roomCode) {
-            socket.emit("join_room", { room: roomCode, username });
-        }
+
+        setTimeout(() => {
+            if (roomCode) {
+                socket.emit("join_room", { room: roomCode, username });
+            }
+        }, 500);  // Attend 500 ms avant de rejoindre la room
 
         socket.on("buzzed", (data) => {
             setBuzzed(data.username);
@@ -75,7 +80,17 @@ function HostRoom() {
                 </button>}
             </div>
             <div>
-                <button onClick={handleReset}>Réinitialiser</button>
+                <button className = "bouton" onClick={handleReset}>Réinitialiser</button>
+            </div>
+            <div className="timer" >
+                <label>Temps de reset du buzzer (secondes) :</label>
+                <input 
+                    
+                    type="number"
+                    value={resetTime}
+                    onChange={handleSetResetTime}  // Met à jour le temps de reset
+                    min="1"
+                />
             </div>
         </div>
     );

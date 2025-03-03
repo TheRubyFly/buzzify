@@ -55,3 +55,8 @@
   top: 24px;
   left: 24px;
 }
+
+.timer {
+  margin: 0.5em;
+  font-size: 2em;
+}

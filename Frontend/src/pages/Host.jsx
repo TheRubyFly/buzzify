@@ -23,6 +23,15 @@ function Host(){
     const [error, setError] = useState("");
     const socket = io(apiUrl);
 
+    useEffect(() => {
+        socket.on("room_created", (data) => {
+            console.log("Rejoint la salle : ",data.room);
+            localStorage.setItem("room", data.room);  // Stocke la room
+            localStorage.setItem("username", pseudo);  // Stocke le pseudo
+            setError(""); // Efface les erreurs précédentes
+            navigate("/host_room"); // Navigue SEULEMENT si la room existe
+        });
+    });
 
     function handleSubmit(e) {
         e.preventDefault(); // Empêche le rechargement de la page
