@@ -6,7 +6,9 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from socketio_config import socketio
 
 print("accès à room.py réussi")
-rooms = {"test": {"reset_time": 5}}  # Dictionnaire pour stocker l'état de chaque room
+dic_rooms = {
+    "test": {"reset_time": 5}
+}  # Dictionnaire pour stocker l'état de chaque room
 
 
 # Générer un code de room aléatoire
@@ -20,7 +22,7 @@ def handle_create_room(data):
 
     room_code = generate_room_code()
     print(room_code)
-    rooms[room_code] = {
+    dic_rooms[room_code] = {
         "players": [data["username"]],
         "buzzed": None,
         "reset_time": 5,
@@ -33,7 +35,7 @@ def handle_create_room(data):
 @socketio.on("join_room")
 def handle_join_room(data):
     room_code = data["room"]
-    if room_code in rooms:
+    if room_code in dic_rooms:
         join_room(room_code)
         emit(
             "room_joined",

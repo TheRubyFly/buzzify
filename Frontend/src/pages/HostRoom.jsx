@@ -35,7 +35,7 @@ function HostRoom() {
     };
 
     useEffect(() => {
-        if (roomCode && username) {
+        if (roomCode) {
             socket.emit("join_room", { room: roomCode, username });
         }
 

@@ -13,6 +13,11 @@ function Player() {
     const navigate = useNavigate();
 
     useEffect(() => {
+
+        if (roomCode) {
+            socket.emit("join_room", { room: roomCode, username});
+        }
+
         socket.on("buzzed", (data) => {
             setBuzzed(data.username);
         });
