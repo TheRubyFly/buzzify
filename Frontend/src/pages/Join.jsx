@@ -20,6 +20,7 @@ function MyForm() {
         socket.once("room_joined", () => {
             console.log("Rejoint la salle :");
             setError(""); // Efface les erreurs précédentes
+            getPlayers()
             navigate("/room"); // Navigue SEULEMENT si la room existe
         });
     

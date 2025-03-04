@@ -12,7 +12,7 @@ function HostRoom() {
     const [roomCode, setRoomCode] = useState(localStorage.getItem("room") || "");
     const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
     const [resetTime, setResetTime] = useState(5);
-    const [listPlayers, setListPlayers] = useState([]);
+    const [players, setPlayers] = useState([]);
 
 
     const handleSetResetTime = (e) => {
@@ -34,7 +34,7 @@ function HostRoom() {
 
     const handleReset = () => {
         console.log("Réinitialisation buzzer")
-        socket.emit("reset", {room: roomCode});
+        socket.emit("reset_host", {room: roomCode});
     };
 
     useEffect(() => {
@@ -58,8 +58,8 @@ function HostRoom() {
             setResetTime(data.time);
         });
 
-        socket.on("list_updated", (data) => {
-            setListPlayers(data.list_players)
+        socket.on("players_list", (data) => {
+            setPlayers(data.players);
         });
 
         return () => socket.off();  // Nettoyage des événements
@@ -71,7 +71,7 @@ function HostRoom() {
             <div className="list-players">
                 <h3>Liste des joueurs :</h3>
                 <ul>
-                    {listPlayers.map((player, index) => (
+                    {players.map((player, index) => (
                         <li key={index}>{player}</li>
                     ))}
                 </ul>

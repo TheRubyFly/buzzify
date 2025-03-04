@@ -19,7 +19,7 @@ def handle_set_reset_time(data):
 # Réinitialisation automatique du buzzer après un délai
 def reset_buzzer_after_delay(room_code, delay):
     time.sleep(delay)  # Attendre le temps défini par l'utilisateur
-    dic_rooms[room_code]["buzzed"] = False
+    dic_rooms[room_code]["buzzed"] = "None"
     socketio.emit("reset", {}, room=room_code)
 
 
@@ -30,7 +30,8 @@ def handle_buzz(data):
     print(f"Utilisateur  est dans les rooms : {user_rooms}")
     room_code = data["room"]
     #   if room_code in dic_rooms:
-    # rooms[room_code]["buzzed"] = True
+    print(data["username"])
+    dic_rooms[room_code]["buzzed"] = data["username"]
     emit("buzzed", {"username": data["username"]}, room=room_code)
     # Démarrer le compte à rebours pour réinitialiser le buzzer
     reset_time = dic_rooms[room_code]["reset_time"]
@@ -39,9 +40,23 @@ def handle_buzz(data):
     ).start()
 
 
+# Événement de réinitialisation du buzzer pour host
+@socketio.on("reset_host")
+def handle_reset(data):
+    print("C'EST UN HOST 44444444444444444444444444444444444444444444444444444444444444l ")
+    room_code = data["room"]
+    dic_rooms[room_code]["buzzed"] = "None"
+    emit("reset", room=room_code)
+
+
 # Événement de réinitialisation du buzzer
 @socketio.on("reset")
 def handle_reset(data):
+    print(data)
     room_code = data["room"]
-    dic_rooms[room_code]["buzzed"] = False
-    emit("reset", room=room_code)
+    print(dic_rooms)
+    print(dic_rooms[room_code])
+    print(data["username"], " essaye de reset ", dic_rooms[room_code]["buzzed"])
+    if data["username"] == (dic_rooms[room_code]["buzzed"] or False):
+        dic_rooms[room_code]["buzzed"] = "None"
+        emit("reset", room=room_code)
