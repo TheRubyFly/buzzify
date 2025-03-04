@@ -13,6 +13,13 @@ function Player() {
     const navigate = useNavigate();
 
     useEffect(() => {
+
+        setTimeout(() => {
+            if (roomCode) {
+                socket.emit("join_room", { room: roomCode, username });
+            }
+        }, 500);  // Attend 500 ms avant de rejoindre la room
+
         socket.on("buzzed", (data) => {
             setBuzzed(data.username);
         });
@@ -26,14 +33,13 @@ function Player() {
 
     const handleBuzz = () => {
         console.log("Quelqu'un a buzzé !")
-        console.log(localStorage.getItem("username"))
-        socket.emit("buzz", { username: username });
+        socket.emit("buzz", { username: username, room: roomCode });
         
     };
 
     const handleReset = () => {
         console.log("Réinitialisation buzzer")
-        socket.emit("reset");
+        socket.emit("reset", { room: roomCode });
     };
 
     return (
@@ -46,6 +52,7 @@ function Player() {
                 </button>
             </div>
             <h1>Buzzify</h1>
+            <h2>ID : {roomCode}</h2>
             <div>{buzzed ? <h2>{buzzed} a buzzé !</h2> : 
                 <button 
                     className="buzzer" 

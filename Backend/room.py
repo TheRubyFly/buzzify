@@ -3,12 +3,13 @@ import string
 
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from app import socketio
+from socketio_config import socketio
 
-# app = Flask(__name__)
-# socketio = SocketIO(app, cors_allowed_origins="*")
 print("accès à room.py réussi")
-rooms = {"test" : True}  # Dictionnaire pour stocker l'état de chaque room
+dic_rooms = {
+    "test": {"reset_time": 5}
+}  # Dictionnaire pour stocker l'état de chaque room
+
 
 # Générer un code de room aléatoire
 def generate_room_code():
@@ -18,18 +19,24 @@ def generate_room_code():
 # Gérer la création de room
 @socketio.on("create_room")
 def handle_create_room(data):
+
     room_code = generate_room_code()
-    rooms[room_code] = {"buzzed": False}  # Initialiser la room avec un buzzer actif
+    print(room_code)
+    dic_rooms[room_code] = {
+        "players": [data["username"]],
+        "buzzed": None,
+        "reset_time": 5,
+    }  # Initialiser la room avec un buzzer actif
     join_room(room_code)
-    emit("room_created", {"room": room_code}, room=room_code)
+    emit("room_created", {"room": room_code}, room=request.sid)
 
 
 # Gérer l'entrée dans une room
 @socketio.on("join_room")
 def handle_join_room(data):
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print(dic_rooms)
     room_code = data["room"]
-    if room_code in rooms:
+    if room_code in dic_rooms:
         join_room(room_code)
         emit(
             "room_joined",

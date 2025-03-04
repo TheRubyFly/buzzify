@@ -1,53 +1,36 @@
+import os
+import threading
+import time
+
 from flask import Flask, request
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from route import routes
+from flask_socketio import SocketIO, emit, rooms
+from route import routes  # Import des routes
+from socketio_config import socketio  # Import de socketio
 
-# rooms = {"test" : ""}
-
+# Initialisation de l'application Flask
 app = Flask(__name__)
-CORS(app)  # Autorise les requêtes cross-origin pour le développement
-socketio = SocketIO(app, cors_allowed_origins="*")
 
-print("accès à app.py réussi")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "clé-par-défaut")
 
-import buzz
-import room
 
+# Ajout du support CORS (évite les erreurs de requêtes cross-origin)
+CORS(app)
+
+# Liaison de SocketIO avec l'application Flask
+socketio.init_app(app)
+
+# Import des modules après l'initialisation pour éviter les imports circulaires
+import buzz  # Gestion du buzzer
+
+# import room  # Gestion des rooms
+# from room import dic_rooms
+
+# Enregistrement des routes
 app.register_blueprint(routes)
 
-buzzed_user = None
 
-
-@socketio.on("buzz")
-def handle_buzz(data):
-    global buzzed_user
-    if buzzed_user is None:
-        buzzed_user = data["username"]
-        emit("buzzed", {"username": buzzed_user}, broadcast=True)
-
-
-@socketio.on("reset")
-def handle_reset():
-    global buzzed_user
-    buzzed_user = None
-    emit("reset", broadcast=True)
-
-
-# # Gérer l'entrée dans une room
-# @socketio.on("join_room")
-# def handle_join_room(data):
-#     print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-#     room_code = data["room"]
-#     if room_code in rooms.keys():
-#         join_room(room_code)
-#         emit(
-#             "room_joined",
-#             {"room": room_code},
-#             room=request.sid,
-#         )
-#     else:
-#         emit("error", {"message": "Room inexistante"}, room=request.sid)
-
+# Lancement du serveur
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    print("✅ Serveur Flask-SocketIO démarré avec succès !")
+    socketio.run(app, debug=True, host="0.0.0.0", port=5000)
