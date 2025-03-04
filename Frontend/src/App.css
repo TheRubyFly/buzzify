@@ -60,3 +60,15 @@
   margin: 0.5em;
   font-size: 2em;
 }
+
+.container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.list-players{
+  flex: 1; /* Prend un petit espace à gauche */
+  max-width: 200px; /* Largeur max de la liste */
+  padding: 10px;
+  border-radius: 10px;
+}

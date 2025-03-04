@@ -1,10 +1,10 @@
 - mettre en contact les gens
-- Créer une room met 1000 ans, régler ça
-- Afficher liste joueur connecté dans hostroom
-- timer smeble pas centrer dans hostroom
+- Afficher liste joueur connecté dans hostroom, j'ai commencé mais quand je change le emit ça ralentit trop l'appli
+- timer semble pas centrer dans hostroom
 - dockerfiles
 - kubernets
 - tests
 - readme
 - .env
 - nettoyer tout
+-Je pense que seul l'host devrait pouvoir réinistialiser le boutton mais dis moi

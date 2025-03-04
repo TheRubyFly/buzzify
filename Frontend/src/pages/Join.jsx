@@ -17,7 +17,7 @@ function MyForm() {
         console.log("tentative de connexion à", localStorage.getItem("room"))
         socket.emit("join_room", { room: code, username: pseudo });
     
-        socket.once("room_joined", (data) => {
+        socket.once("room_joined", () => {
             console.log("Rejoint la salle :");
             setError(""); // Efface les erreurs précédentes
             navigate("/room"); // Navigue SEULEMENT si la room existe

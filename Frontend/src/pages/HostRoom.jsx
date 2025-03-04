@@ -12,6 +12,7 @@ function HostRoom() {
     const [roomCode, setRoomCode] = useState(localStorage.getItem("room") || "");
     const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
     const [resetTime, setResetTime] = useState(5);
+    const [listPlayers, setListPlayers] = useState([]);
 
 
     const handleSetResetTime = (e) => {
@@ -57,12 +58,25 @@ function HostRoom() {
             setResetTime(data.time);
         });
 
+        socket.on("list_updated", (data) => {
+            setListPlayers(data.list_players)
+        });
+
         return () => socket.off();  // Nettoyage des événements
     }, []);
 
 
     return (
-        <div>
+        <div className="container">
+            <div className="list-players">
+                <h3>Liste des joueurs :</h3>
+                <ul>
+                    {listPlayers.map((player, index) => (
+                        <li key={index}>{player}</li>
+                    ))}
+                </ul>
+            </div>
+
             <div>
                  <button 
                  className="home-button" 
@@ -70,27 +84,30 @@ function HostRoom() {
                     <img src="https://banner2.cleanpng.com/20180411/ike/avfjoey57.webp" width="72" height="72"/>
                 </button>
             </div>
-            <h1>Buzzify</h1>
-            <h2>ID : {roomCode}</h2>
-            <div>{buzzed ? <h2>{buzzed} a buzzé !</h2> : 
-                <button 
-                    className="buzzer" 
-                    onClick={handleBuzz}>
-                    <img src="https://www.espace-orthophonie.fr/1244519-large_default/buzzer.jpg" width="168" height="168"/>
-                </button>}
-            </div>
+
             <div>
-                <button className = "bouton" onClick={handleReset}>Réinitialiser</button>
-            </div>
-            <div className="timer" >
-                <label>Temps de reset du buzzer (secondes) :</label>
-                <input 
-                    
-                    type="number"
-                    value={resetTime}
-                    onChange={handleSetResetTime}  // Met à jour le temps de reset
-                    min="1"
-                />
+                <h1>Buzzify</h1>
+                <h2>ID : {roomCode}</h2>
+                <div>{buzzed ? <h2>{buzzed} a buzzé !</h2> : 
+                    <button 
+                        className="buzzer" 
+                        onClick={handleBuzz}>
+                        <img src="https://www.espace-orthophonie.fr/1244519-large_default/buzzer.jpg" width="168" height="168"/>
+                    </button>}
+                </div>
+                <div>
+                    <button className = "bouton" onClick={handleReset}>Réinitialiser</button>
+                </div>
+                <div className="timer" >
+                    <label>Temps de reset du buzzer (secondes) :</label>
+                    <input 
+                        
+                        type="number"
+                        value={resetTime}
+                        onChange={handleSetResetTime}  // Met à jour le temps de reset
+                        min="1"
+                    />
+                </div>
             </div>
         </div>
     );
