@@ -20,11 +20,7 @@ CORS(app)
 # Liaison de SocketIO avec l'application Flask
 socketio.init_app(app)
 
-# Import des modules après l'initialisation pour éviter les imports circulaires
 import buzz  # Gestion du buzzer
-
-# import room  # Gestion des rooms
-# from room import dic_rooms
 
 # Enregistrement des routes
 app.register_blueprint(routes)

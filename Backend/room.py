@@ -34,14 +34,16 @@ def handle_create_room(data):
 # Gérer l'entrée dans une room
 @socketio.on("join_room")
 def handle_join_room(data):
-    print(dic_rooms)
     room_code = data["room"]
     if room_code in dic_rooms:
         join_room(room_code)
+        # dic_rooms[room_code]["players"].append(data["username"])
+        print(dic_rooms)
         emit(
             "room_joined",
             {"room": room_code},
             room=request.sid,
         )
+        # emit("list_updated",{"list_players": dic_rooms[room_code]["players"]}, room=room_code)
     else:
         emit("error", {"message": "Room inexistante"}, room=request.sid)
