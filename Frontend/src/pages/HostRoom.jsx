@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { apiUrl } from "../config";
+
 import { useNavigate } from "react-router-dom";
 
 
@@ -39,6 +39,18 @@ function HostRoom() {
 
     useEffect(() => {
 
+        if (roomCode) {
+            setTimeout(() => {
+                console.log("📡 Envoi de 'join_room' avec", { room: roomCode, username });
+                socket.emit("join_room", { room: roomCode, username });
+            }, 500);
+        }
+
+        socket.on("room_joined", (data) => {
+            console.log("📩 Réception de 'room_joined' avec", data);
+            setPlayers(data.players);
+        });
+
         setTimeout(() => {
             if (roomCode) {
                 socket.emit("join_room", { room: roomCode, username });
@@ -58,8 +70,9 @@ function HostRoom() {
             setResetTime(data.time);
         });
 
-        socket.on("players_list", (data) => {
-            setPlayers(data.players);
+        socket.on("room_joined", (data) => {
+            console.log("📩 Réception de 'room_joined' :", data);
+            setPlayers(data.players);     
         });
 
         return () => socket.off();  // Nettoyage des événements
@@ -70,11 +83,11 @@ function HostRoom() {
         <div className="container">
             <div className="list-players">
                 <h3>Liste des joueurs :</h3>
-                <ul>
+                {<ul>
                     {players.map((player, index) => (
                         <li key={index}>{player}</li>
                     ))}
-                </ul>
+                </ul>}
             </div>
 
             <div>

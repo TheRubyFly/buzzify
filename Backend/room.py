@@ -41,12 +41,13 @@ def handle_join_room(data):
         if data["username"] not in dic_rooms[room_code]["players"]:
             dic_rooms[room_code]["players"].append(data["username"])
         print("Après ajout :", dic_rooms[room_code]["players"])
+        print(f"📡 Envoi de 'room_joined' à {request.sid}")
         emit(
             "room_joined",
-            {"room": room_code},
-            room=request.sid,
+            {"room": room_code, "players": dic_rooms[room_code]["players"]},
+            room=room_code
         )
-        # emit("list_updated",{"list_players": dic_rooms[room_code]["players"]}, room=room_code)
+        print("room_joined émis", dic_rooms[room_code]["players"])
     else:
         emit("error", {"message": "Room inexistante"}, room=request.sid)
 
