@@ -29,4 +29,4 @@ app.register_blueprint(routes)
 # Lancement du serveur
 if __name__ == "__main__":
     print("✅ Serveur Flask-SocketIO démarré avec succès !")
-    socketio.run(app, debug=True, host="0.0.0.0", port=5000)
+    # socketio.run(app, debug=True, host="0.0.0.0", port=5000)
