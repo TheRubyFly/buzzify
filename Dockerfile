@@ -55,4 +55,4 @@ EXPOSE 80 5000
 ENV PYTHONPATH=/backend
 
 # Lancer Nginx et l'application Flask via Gunicorn avec le worker sync
-CMD ["sh", "-c", "nginx -g 'daemon off;' & /backend/venv/bin/gunicorn -k sync -b 0.0.0.0:5000 backend.app:app"]
+CMD ["sh", "-c", "nginx -g 'daemon off;' & /backend/venv/bin/gunicorn -k eventlet -b 0.0.0.0:5000 backend.app:app"]
