@@ -1,11 +1,17 @@
-import os
-import threading
-import time
+"""
+app.py
 
-from flask import Flask, request
+Ce module initialise et configure le backend de Buzzify.
+
+Il met en place un serveur Flask avec gestion des CORS et WebSockets via Flask-SocketIO.
+"""
+
+import os
+
+from flask import Flask
 from flask_cors import CORS
-from flask_socketio import SocketIO, emit, rooms
-from route import routes  # Import des routes
+
+from route import routes  # Import des routespip install flask flask-cors flask-socketio
 from socketio_config import socketio  # Import de socketio
 
 # Initialisation de l'application Flask
@@ -19,8 +25,6 @@ CORS(app)
 
 # Liaison de SocketIO avec l'application Flask
 socketio.init_app(app)
-
-import buzz  # Gestion du buzzer
 
 # Enregistrement des routes
 app.register_blueprint(routes)

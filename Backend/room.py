@@ -1,8 +1,15 @@
+"""
+room.py
+
+Ce module permet de gérer toutes les actions liées au salles
+"""
+
+
 import random
 import string
 
-from flask import Flask, request
-from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask import request # Flask,
+from flask_socketio import  emit, join_room #SocketIO, leave_room
 from socketio_config import socketio
 
 print("accès à room.py réussi")
@@ -13,13 +20,25 @@ dic_rooms = {
 
 # Générer un code de room aléatoire
 def generate_room_code():
+    """
+    Crée un code aléatoire composé de 6 caractères compris entre les majuscules et les chiffres
+
+    Ret:
+        str (le code aléatoirement créé)
+    """
     return "".join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 
 # Gérer la création de room
 @socketio.on("create_room")
 def handle_create_room(data):
+    """
+    Permet de créer une salle
 
+    Args :
+        data : un dictionnaire contenant:
+            -username : le nom du joueur qui crée la salle    
+    """
     room_code = generate_room_code()
     print(room_code)
     dic_rooms[room_code] = {
@@ -34,6 +53,14 @@ def handle_create_room(data):
 # Gérer l'entrée dans une room
 @socketio.on("join_room")
 def handle_join_room(data):
+    """
+    Permet de rejoindre une salle
+
+    Args :
+        data : un dictionnaire contenant:
+            -username : le nom du joueur qui rejoint la salle
+            -room : le code de la salle   
+    """
     room_code = data["room"]
     print("Avant ajout :", dic_rooms[room_code]["players"])
     if room_code in dic_rooms:
@@ -41,7 +68,6 @@ def handle_join_room(data):
         if data["username"] not in dic_rooms[room_code]["players"]:
             dic_rooms[room_code]["players"].append(data["username"])
         print("Après ajout :", dic_rooms[room_code]["players"])
-        print(f"📡 Envoi de 'room_joined' à {request.sid}")
         emit(
             "room_joined",
             {"room": room_code, "players": dic_rooms[room_code]["players"]},
@@ -54,6 +80,13 @@ def handle_join_room(data):
 
 @socketio.on("get_players")
 def handle_get_players(data):
+    """
+    Permet de récupérer la liste des joueurs dans une salle
+
+    Args :
+        data : un dictionnaire contenant:
+            -room : le code de la salle     
+    """
     room_code = data["room"]
     if room_code in dic_rooms:
         players = dic_rooms[room_code]["players"]
