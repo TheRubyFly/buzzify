@@ -7,7 +7,7 @@ from socketio_config import socketio
 
 print("accès à room.py réussi")
 dic_rooms = {
-    "test": {"reset_time": 5, "buzzed" : "Personne"}
+    "test": {"reset_time": 5, "buzzed": "Personne"}
 }  # Dictionnaire pour stocker l'état de chaque room
 
 
@@ -45,7 +45,7 @@ def handle_join_room(data):
         emit(
             "room_joined",
             {"room": room_code, "players": dic_rooms[room_code]["players"]},
-            room=room_code
+            room=room_code,
         )
         print("room_joined émis", dic_rooms[room_code]["players"])
     else:

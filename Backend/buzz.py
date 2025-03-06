@@ -43,7 +43,9 @@ def handle_buzz(data):
 # Événement de réinitialisation du buzzer pour host
 @socketio.on("reset_host")
 def handle_reset(data):
-    print("C'EST UN HOST 44444444444444444444444444444444444444444444444444444444444444l ")
+    print(
+        "C'EST UN HOST 44444444444444444444444444444444444444444444444444444444444444l "
+    )
     room_code = data["room"]
     dic_rooms[room_code]["buzzed"] = "None"
     emit("reset", room=room_code)
