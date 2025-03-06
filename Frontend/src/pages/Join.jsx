@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { apiUrl } from "../config";
@@ -11,28 +11,32 @@ function MyForm() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const joinRoom = () => {
-        localStorage.setItem("room", code);  // Stocke la room
-        localStorage.setItem("username", pseudo);  // Stocke le pseudo
-        console.log("tentative de connexion à", localStorage.getItem("room"))
-        socket.emit("join_room", { room: code, username: pseudo });
-    
-        socket.once("room_joined", () => {
-            console.log("Rejoint la salle :");
-            setError(""); // Efface les erreurs précédentes
-            navigate("/room"); // Navigue SEULEMENT si la room existe
+    useEffect(() => {
+        socket.on("room_joined", () => {
+            console.log("Rejoint la salle !");
+            setError(""); // Effacer les erreurs
+            navigate("/room");
         });
-    
-        // Écoute l'événement "error" pour gérer les erreurs
-        socket.once("error", (data) => {
+
+        socket.on("error", (data) => {
             console.error("Erreur du serveur :", data.message);
-            setError("Veuillez entrer un code valide"); // Affiche l'erreur
-            return;
+            setError("Veuillez entrer un code valide");
         });
-    
-        // Envoie la requête au serveur
+
+        return () => {
+            socket.off("room_joined");
+            socket.off("error");
+        };
+    }, [navigate]);
+
+    const joinRoom = () => {
+        localStorage.setItem("room", code);
+        localStorage.setItem("username", pseudo);
+        console.log("🔹 Tentative de connexion à", localStorage.getItem("room"));
+            
         socket.emit("join_room", { room: code, username: pseudo });
     };
+
 
     function handleSubmit(e) {
         e.preventDefault();

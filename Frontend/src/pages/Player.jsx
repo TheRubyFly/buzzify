@@ -38,8 +38,9 @@ function Player() {
     };
 
     const handleReset = () => {
-        console.log("Réinitialisation buzzer")
-        socket.emit("reset", { room: roomCode });
+        // console.log("Réinitialisation buzzer")
+        console.log("Envoi de reset avec :", { room: roomCode, username: username });
+        socket.emit("reset", { room: roomCode, username: username });
     };
 
     return (
