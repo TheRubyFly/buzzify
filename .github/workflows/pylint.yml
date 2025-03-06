@@ -18,6 +18,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
+        pip install flask flask-cors flask-socketio  # Ajout des dépendances Flask
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        SCORE=$(pylint $(git ls-files '*.py') | tee /dev/tty | grep -o "rated at [0-9.]\+" | awk '{print $3}')
+        if (( $(echo "$SCORE < 7" | bc -l) )); then
+          echo "Pylint score ($SCORE) inférieur à 7. Échec du build."
+          exit 1
+        fi
+        echo "Pylint score acceptable : $SCORE"
