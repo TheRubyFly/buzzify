@@ -31,7 +31,7 @@ def handle_set_reset_time(data):
 
 
 # Réinitialisation automatique du buzzer après un délai
-def reset_buzzer_after_delay(room_code, delay, socketio):
+def reset_buzzer_after_delay(room_code, delay):
     """
     Permet de reset le buzzer automatiquement une fois le délai maximal dépassé
 
@@ -42,11 +42,8 @@ def reset_buzzer_after_delay(room_code, delay, socketio):
     time.sleep(delay)  # Attendre le temps défini par l'utilisateur
     dic_rooms[room_code]["buzzed"] = "None"
 
-    # Vérifier que socketio est bien initialisé avant d'émettre
-    if socketio is not None:
-        socketio.emit("reset", {}, room=room_code)
-    else:
-        print("SocketIO is not initialized!")
+    socketio.emit("reset", {}, room=room_code)
+
 
 
 # Événement de buzz

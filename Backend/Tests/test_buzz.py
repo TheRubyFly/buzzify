@@ -48,9 +48,9 @@ class TestBuzzerFunctions(unittest.TestCase):
 
     @patch("buzz.socketio.emit")
     @patch("buzz.time.sleep", return_value=None)
-    def test_reset_buzzer_after_delay(self, mock_sleep, mock_emit, socketio=socketio):
+    def test_reset_buzzer_after_delay(self, mock_sleep, mock_emit):
         dic_rooms["room1"] = {"buzzed": "user1"}
-        reset_buzzer_after_delay("room1", 1, socketio)
+        reset_buzzer_after_delay("room1", 1)
         mock_sleep.assert_called_with(1)
         self.assertEqual(dic_rooms["room1"]["buzzed"], "None")
         mock_emit.assert_called_with("reset", {}, room="room1")
