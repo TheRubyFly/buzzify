@@ -8,8 +8,8 @@ import threading
 import time
 
 # import room  # Gestion des rooms
-from flask import request  # Flask,
-from flask_socketio import emit, rooms  # SocketIO, join_room, leave_room,
+from flask import  Flask, request  #
+from flask_socketio import SocketIO, join_room, leave_room, emit, rooms  
 from room import dic_rooms
 from socketio_config import socketio
 

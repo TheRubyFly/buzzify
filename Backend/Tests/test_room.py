@@ -1,14 +1,23 @@
+"""
+test_room.py
+
+Ce module permet de tester les fonctions liées aux salles via des tests unitaires
+"""
+
 import unittest
 from unittest.mock import MagicMock, patch
 
-from flask import Flask, request
+from flask import Flask #, request
 from flask_socketio import SocketIO
 from room import (dic_rooms, generate_room_code, handle_create_room,
                   handle_get_players, handle_join_room)
-from socketio_config import socketio
+# from socketio_config import socketio
 
 
 class TestRoomFunctions(unittest.TestCase):
+    """
+    Test unitaires pour les fonctionnalités liées aux salles
+    """
     def setUp(self):
         """Configuration de l'application et du SocketIO pour les tests"""
         # Créer une instance Flask et lier SocketIO
@@ -35,7 +44,7 @@ class TestRoomFunctions(unittest.TestCase):
 
     @patch("room.join_room")
     @patch("room.emit")
-    def test_handle_create_room(self, mock_emit, mock_join_room):
+    def test_handle_create_room(self, mock_emit):
         """Test de la création de salle"""
         data = {"username": "player1"}
         # Appeler l'événement de création de salle
@@ -52,7 +61,7 @@ class TestRoomFunctions(unittest.TestCase):
 
     @patch("room.join_room")
     @patch("room.emit")
-    def test_handle_join_room(self, mock_emit, mock_join_room):
+    def test_handle_join_room(self, mock_emit):
         """Test de rejoindre une salle existante"""
         # Créer une salle manuellement pour tester l'ajout de joueur
         room_code = "ROOM123"
@@ -99,6 +108,7 @@ class TestRoomFunctions(unittest.TestCase):
 
     @patch("room.emit")
     def test_handle_get_players_invalid_room(self, mock_emit):
+        """Test pour récupérer la liste des joueurs si on est dans un salle invalide"""
         # Simuler une demande avec une salle inexistante
         data = {"room": "INVALIDROOM"}
         mock_request = MagicMock()
