@@ -8,8 +8,8 @@ import threading
 import time
 
 # import room  # Gestion des rooms
-from flask import request #Flask,
-from flask_socketio import emit, rooms # SocketIO, join_room, leave_room,
+from flask import request  # Flask,
+from flask_socketio import emit, rooms  # SocketIO, join_room, leave_room,
 from room import dic_rooms
 from socketio_config import socketio
 
@@ -31,7 +31,7 @@ def handle_set_reset_time(data):
 
 
 # Réinitialisation automatique du buzzer après un délai
-def reset_buzzer_after_delay(room_code, delay):
+def reset_buzzer_after_delay(room_code, delay, socketio):
     """
     Permet de reset le buzzer automatiquement une fois le délai maximal dépassé
 
@@ -41,7 +41,12 @@ def reset_buzzer_after_delay(room_code, delay):
     """
     time.sleep(delay)  # Attendre le temps défini par l'utilisateur
     dic_rooms[room_code]["buzzed"] = "None"
-    socketio.emit("reset", {}, room=room_code)
+
+    # Vérifier que socketio est bien initialisé avant d'émettre
+    if socketio is not None:
+        socketio.emit("reset", {}, room=room_code)
+    else:
+        print("SocketIO is not initialized!")
 
 
 # Événement de buzz
@@ -72,7 +77,7 @@ def handle_buzz(data):
 
 # Événement de réinitialisation du buzzer pour host
 @socketio.on("reset_host")
-def handle_reset(data):
+def handle_reset_host(data):
     """
     Permet de gérer le reset dans le cas d'un joueur admin
 
