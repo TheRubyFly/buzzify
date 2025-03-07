@@ -44,13 +44,13 @@ class TestRoomFunctions(unittest.TestCase):
 
     @patch("room.join_room")
     @patch("room.emit")
-    def test_handle_create_room(self, mock_emit):
+    def test_handle_create_room(self, mock_emit, mock_join_room):
         """Test de la création de salle"""
         data = {"username": "player1"}
         # Appeler l'événement de création de salle
         self.client.emit("create_room", data)
         # Attendre que la salle soit créée
-        room_code = list(dic_rooms.keys())[1]
+        room_code = list(dic_rooms.keys())[2]
         mock_request = MagicMock()
         mock_request.sid = "fake_sid"  # ID de session simulé
 
@@ -61,7 +61,7 @@ class TestRoomFunctions(unittest.TestCase):
 
     @patch("room.join_room")
     @patch("room.emit")
-    def test_handle_join_room(self, mock_emit):
+    def test_handle_join_room(self, mock_emit, mock_join_room):
         """Test de rejoindre une salle existante"""
         # Créer une salle manuellement pour tester l'ajout de joueur
         room_code = "ROOM123"

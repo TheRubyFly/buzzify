@@ -41,7 +41,7 @@ class TestBuzzerFunctions(unittest.TestCase):
 
     @patch("buzz.emit")
     @patch("buzz.rooms", return_value=["room1"])
-    def test_handle_buzz(self, mock_emit):
+    def test_handle_buzz(self, mock_rooms, mock_emit):
         """
         Test de handle_buzz
 
