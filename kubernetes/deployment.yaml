@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buzzify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: buzzify
+  template:
+    metadata:
+      labels:
+        app: buzzify
+    spec:
+      containers:
+        - name: buzzify
+          image: gfreydier/buzzify:latest
+          envFrom:
+            - configMapRef:
+                name: buzzify-config
+          ports:
+            - containerPort: 80  # Frontend (Nginx)
+            - containerPort: 5000  # Backend (Flask via Gunicorn)
