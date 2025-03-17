@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: buzzify-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: buzzify.kub.sspcloud.fr
+      http:
+        paths:
+          - path: /buzzify
+            pathType: Prefix
+            backend:
+              service:
+                name: buzzify-service
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: buzzify-service
+                port:
+                  number: 5000

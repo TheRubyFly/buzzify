@@ -10,8 +10,8 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
-
-from route import routes  # Import des routespip install flask flask-cors flask-socketio
+from route import \
+    routes  # Import des routespip install flask flask-cors flask-socketio
 from socketio_config import socketio  # Import de socketio
 
 # Initialisation de l'application Flask
@@ -33,4 +33,4 @@ app.register_blueprint(routes)
 # Lancement du serveur
 if __name__ == "__main__":
     print("✅ Serveur Flask-SocketIO démarré avec succès !")
-    # socketio.run(app, debug=True, host="0.0.0.0", port=5000)
+    socketio.run(app, debug=True, host="0.0.0.0", port=5000)
