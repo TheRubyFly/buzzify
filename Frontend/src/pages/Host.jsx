@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { apiUrl } from "../config";
 import { useNavigate } from "react-router-dom";
 
 
 function Host(){
-
     // Créer une nouvelle room
     const createRoom = () => {
-        socket.emit("create_room", { username: pseudo });
-        socket.once("room_created", (data) => {
-            console.log("Rejoint la salle : ",data.room);
+        if (!socket.current) {
+            console.log("createRoom - Socket non initialisé !");
+            return;
+        } else {
+            console.log("createRoom - Socket initialisé !", socket.current);
+        }
+
+        socket.current.emit("create_room", { username: pseudo });
+        
+        socket.current.on("room_created", (data) => {
+            console.log("createRoom - Rejoint la salle : ",data.room);
             localStorage.setItem("room", data.room);  // Stocke la room
             localStorage.setItem("username", pseudo);  // Stocke le pseudo
             setError(""); // Efface les erreurs précédentes
@@ -18,15 +25,32 @@ function Host(){
         });
     };
     const navigate = useNavigate();
-    const [code, setCode] = useState("");
-    const [pseudo, setPseudo] = useState("");
+    const [pseudo, setPseudo] = useState(() => localStorage.getItem("username") || "");
     const [error, setError] = useState("");
-    const socket = io(apiUrl);
+    const socket = useRef(null);
+
+    // INitialisation
+    useEffect(() => {
+        socket.current = io(apiUrl); // Stocke l'instance de socket dans la ref
+        console.log("WebSocket connecté");
+    
+        return () => {
+            socket.current.disconnect(); // Déconnecte proprement au démontage
+            console.log("WebSocket déconnecté");
+        };
+    }, []); 
+
+    useEffect(() => {
+        if (pseudo) {
+            localStorage.setItem("username", pseudo);
+            console.log("Pseudo mis à jour dans le stockage :", pseudo);
+        }
+    }, [pseudo]);
 
 
     function handleSubmit(e) {
+        console.log("handleSubmit - Vérification : les champs ne doivent pas être vides");
         e.preventDefault(); // Empêche le rechargement de la page
-
         // Vérification : les champs ne doivent pas être vides
         if (!pseudo.trim()) {
             setError("Veuillez remplir tous les champs !");
@@ -34,10 +58,9 @@ function Host(){
         }
 
         // Si tout est bon, on peut envoyer les données
-        console.log("Rejoindre la salle avec:", { pseudo });
+        console.log("handleSubmit - Rejoindre la salle avec:", { pseudo });
         setError(""); // Efface le message d'erreur
         createRoom()
-        // navigate("/host_room")
     }
 
     return(

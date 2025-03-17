@@ -8,6 +8,10 @@ Il met en place un serveur Flask avec gestion des CORS et WebSockets via Flask-S
 
 import os
 
+import eventlet
+
+eventlet.monkey_patch()
+
 from flask import Flask
 from flask_cors import CORS
 from route import \
