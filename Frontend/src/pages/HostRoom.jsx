@@ -13,6 +13,7 @@ function HostRoom() {
     const [username, setUsername] = useState(localStorage.getItem("username") || "Joueur");
     const [resetTime, setResetTime] = useState(5);
     const [players, setPlayers] = useState([]);
+    const [resetKey, setResetKey] = useState(0);
 
 
     const handleSetResetTime = (e) => {
@@ -35,6 +36,7 @@ function HostRoom() {
     const handleReset = () => {
         console.log("Réinitialisation buzzer")
         socket.emit("reset_host", {room: roomCode});
+        
     };
 
     useEffect(() => {
@@ -63,7 +65,9 @@ function HostRoom() {
         });
 
         socket.on("reset", () => {
+            console.log("R buzzer");
             setBuzzed(null);
+            setResetKey(prevKey => prevKey + 1);
         });
 
         socket.on("reset_time_updated", (data) => {
@@ -75,7 +79,12 @@ function HostRoom() {
             setPlayers(data.players);     
         });
 
-        return () => socket.off();  // Nettoyage des événements
+        return () => {
+            socket.off("buzzed");
+            socket.off("reset");
+            socket.off("connect");
+            socket.off("disconnect");
+        };
     }, []);
 
 

@@ -7,6 +7,8 @@ from flask_socketio import SocketIO, emit, join_room, leave_room, rooms
 from room import dic_rooms
 from socketio_config import socketio
 
+reset_locks = {}  # Garde une trace des rooms en cours de reset
+
 
 # Définir le temps de reset
 @socketio.on("set_reset_time")
@@ -16,10 +18,10 @@ def handle_set_reset_time(data):
     emit("reset_time_updated", {"time": data["time"]}, room=room_code)
 
 
-# Réinitialisation automatique du buzzer après un délai
 def reset_buzzer_after_delay(room_code, delay):
+
     time.sleep(delay)  # Attendre le temps défini par l'utilisateur
-    dic_rooms[room_code]["buzzed"] = "None"
+    dic_rooms[room_code]["buzzed"] = False
     socketio.emit("reset", {}, room=room_code)
 
 
@@ -42,11 +44,13 @@ def handle_buzz(data):
 
 # Événement de réinitialisation du buzzer pour host
 @socketio.on("reset_host")
-def handle_reset(data):
-    print("C'EST UN HOST 44444444444444444444444444444444444444444444444444444444444444l ")
+def handle_reset_host(data):
+    print(
+        "C'EST UN HOST 44444444444444444444444444444444444444444444444444444444444444l "
+    )
     room_code = data["room"]
     dic_rooms[room_code]["buzzed"] = "None"
-    emit("reset", room=room_code)
+    socketio.emit("reset", {}, room=room_code)
 
 
 # Événement de réinitialisation du buzzer
@@ -57,6 +61,6 @@ def handle_reset(data):
     print(dic_rooms)
     print(dic_rooms[room_code])
     print(data["username"], " essaye de reset ", dic_rooms[room_code]["buzzed"])
-    if data["username"] == (dic_rooms[room_code]["buzzed"] or False):
+    if data["username"] == dic_rooms[room_code]["buzzed"]:
         dic_rooms[room_code]["buzzed"] = "None"
         emit("reset", room=room_code)
