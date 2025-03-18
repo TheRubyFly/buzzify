@@ -1,6 +1,8 @@
 import os
 import threading
 import time
+import eventlet
+eventlet.monkey_patch()
 
 from flask import Flask, request
 from flask_cors import CORS
