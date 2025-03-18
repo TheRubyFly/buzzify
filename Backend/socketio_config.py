@@ -1,3 +1,8 @@
+"""
+Configuration de Flask-SocketIO pour gérer les WebSockets.
+"""
+
 from flask_socketio import SocketIO
 
-socketio = SocketIO(cors_allowed_origins="*")  # Déclare le socket
+# Déclare le socket avec CORS autorisé pour toutes les origines
+socketio = SocketIO(cors_allowed_origins="*")

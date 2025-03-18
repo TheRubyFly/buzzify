@@ -1,14 +1,22 @@
-import os
-import threading
-import time
-import eventlet
-eventlet.monkey_patch()
+"""
+Fichier principal de l'application Flask avec SocketIO.
 
+- Initialise l'application Flask
+- Configure Flask-SocketIO
+- Enregistre les routes et démarre le serveur
+"""
+
+import os
+
+import buzz  # Gestion du buzzer
+import eventlet
 from flask import Flask, request
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, rooms
 from route import routes  # Import des routes
 from socketio_config import socketio  # Import de socketio
+
+eventlet.monkey_patch()
 
 # Initialisation de l'application Flask
 app = Flask(__name__)
@@ -22,7 +30,6 @@ CORS(app)
 # Liaison de SocketIO avec l'application Flask
 socketio.init_app(app)
 
-import buzz  # Gestion du buzzer
 
 # Enregistrement des routes
 app.register_blueprint(routes)

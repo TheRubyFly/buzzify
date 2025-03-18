@@ -25,6 +25,7 @@ class TestBuzzerFunctions(unittest.TestCase):
     Test unitaires pour les fonctionnalités liées à buzz
     """
 
+
 def setUp(self):
     """
     Configuration de l'application et du SocketIO pour les tests
