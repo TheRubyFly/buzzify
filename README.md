@@ -4,7 +4,7 @@ Projet de conception logicielle de Gaspard Freydier et Camille Pellat
 ***
 ## Objectifs
 
-Cette application a pour but de créer des salles où vous et vos amis pourraient appuyer sur un buzzer, dans l'optique de vous accompagner lors de vos quizzs ou autres blindtests
+Cette application a pour but de créer des salles où vous et vos amis pourraient appuyer sur un buzzer, dans l'optique de vous accompagner lors de vos quizzs ou autres blindtests.
 
 ***
 ## Organisation
