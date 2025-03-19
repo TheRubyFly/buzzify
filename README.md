@@ -23,9 +23,11 @@ Quand l'application est lancée, une WebSocket globale est créée. On peut ensu
 
 * Dans une console, entrer : 
 ```
-    sudo docker pull gfreydier/buzzify:latest
-    sudo docker run -p 8080:80 -p 5000:5000 gfreydier/buzzify
+    sudo docker pull gfreydier/buzzify-backend:latest
+    sudo docker pull gfreydier/buzzify-frontend:latest
+    sudo docker run -d --name buzzify-backend -p 5000:5000 gfreydier/buzzify-backend
+    sudo docker run -d --name buzzify-frontend -p 5173:5173 gfreydier/buzzify-frontend
 ```
-* se rendre sur localhost:8080/
+* se rendre sur localhost:5173/
 
 A présent, vous pouvez créer une room, ou rejoindre une room préexistante. Si vous créer la room, vous aurez accès à la liste des joueurs dans la salle, et pourrez régler le délai maximal pour répondre le buzzer. Seul l'hôte et le joueur ayant buzzé peuvent réinitialiser le timer avant que le délai maximal soit terminé.
