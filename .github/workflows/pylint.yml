@@ -24,3 +24,12 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint --disable=unused-import $(git ls-files '*.py')
+
+    - name: Check Pylint Score
+      run: |
+        SCORE=$(pylint $(git ls-files '*.py') | tee pylint-report.txt | grep -o "rated at [0-9.]\+" | awk '{print $3}')
+        echo "Pylint score: $SCORE"
+        if (( $(echo "$SCORE < 8" | bc -l) )); then
+          echo "Pylint score ($SCORE) is below 8. Build failed."
+          exit 1
+        fi
