@@ -23,4 +23,4 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        pylint --disable=unused-import $(git ls-files 'buzzify/Backend/*.py')
+        pylint --disable=unused-import $(git ls-files '*.py')
